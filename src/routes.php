@@ -9,6 +9,6 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
     // Sample log message
     $this->logger->info("Slim-Skeleton '/' route");
 
-    // Render index view
+    // Render index teste view
     return $this->renderer->render($response, 'index.phtml', $args);
 });
