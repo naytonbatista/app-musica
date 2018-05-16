@@ -18,10 +18,10 @@ return [
 
         'db' =>[
             'driver' => 'mysql',
-            'host' => 'localhost',
-            'database' => 'bdbookmusic_teste',
-            'username' => 'root',
-            'password' => '1234',
+            'host' => 'bdeasydist-teste.crekmjq8o5xh.sa-east-1.rds.amazonaws.com',
+            'database' => 'BDBOOKMUSIC_TESTE',
+            'username' => 'bookmusic',
+            'password' => '@bookmusic2018',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => ''
