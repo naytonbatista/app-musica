@@ -8,5 +8,4 @@ class Usuario extends Eloquent
 {
     protected $table = 'usuario';
 
-    const id = "ID_USUARIO";
 }
