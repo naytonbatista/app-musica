@@ -19,10 +19,10 @@ $app->post('/api/usuario', function($request, $response, $args){
 
     $usuario =  new Usuario;
 
-    $usuario->USU_EMAIL = $data["P_USU_EMAIL"];
-    $usuario->USU_SENHA = $data["P_USU_SENHA"];
+    $usuario->email = $data["email"];
+    $usuario->senha = $data["senha"];
 
-    $retorno = $repository->Inserir($usuario);
+    $retorno = $repository->Incluir($usuario);
 
     return $response->withJson($retorno);
 

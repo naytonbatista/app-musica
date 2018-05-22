@@ -25,3 +25,8 @@ $container['db'] = function($c){
     $manager->bootEloquent();
     return $manager->getConnection('default');
 };
+
+$container['user_repository'] = function($c){
+    $repository = new App\Repositories\UsuarioRepository($c['db']);
+    return $repository;
+};
