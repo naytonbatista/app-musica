@@ -10,4 +10,9 @@ $app->get('/api/artista', function($request, $response, $args){
     return $response->withJson($artistas);
 });
 
+$app->get('/api/artista/{id}', function($request, $response, $args){
+    $id = $args["id"];
+    $artista = Artista::findOrFail($id);
+    return $response->withJson($artista);
+});
 
