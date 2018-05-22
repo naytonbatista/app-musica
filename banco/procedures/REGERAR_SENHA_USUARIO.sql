@@ -1,8 +1,12 @@
-CREATE DEFINER=`dba`@`%` PROCEDURE `REGERAR_SENHA_USUARIO`(IN P_ID_USUARIO INT,
-										                   OUT P_SENHA VARCHAR(255))
+CREATE DEFINER=`dba`@`%` PROCEDURE `REGERAR_SENHA_USUARIO`(IN  P_ID_USUARIO INT,
+										                   OUT P_SENHA      VARCHAR(255),
+                                                           IN  P_COMMIT	    VARCHAR(1),
+                                                           OUT P_OK	        VARCHAR(1),
+                                                           OUT P_RETORNO    VARCHAR(2000))
 BEGIN
 
-DECLARE V_USU_EMAIL   VARCHAR(255);
+DECLARE V_TEXTO	     VARCHAR(2000);
+DECLARE V_USU_EMAIL  VARCHAR(255);
 DECLARE V_SENHA	     VARCHAR(255);
 DECLARE V_QTD_STRING INT;
 DECLARE V_POSICAO	 INT;
@@ -32,7 +36,17 @@ CALL VALIDA_USUARIO(P_ID_USUARIO, 'USUARIO');
 		 SET U.USU_SENHA  = V_SENHA
 	   WHERE U.ID_USUARIO = P_ID_USUARIO;
  
+ SET V_TEXTO :=  MSG_TEXTO('REGERAR_SENHA_USUARIO'); 
+			     -- Senha alterada com sucesso.
+                
  -- RETORNA A NOVA SENHA
- SET P_SENHA = V_SENHA;
+SET P_SENHA = V_SENHA;
+SET P_OK      := 'S';
+SET P_RETORNO := V_TEXTO;
+ 
+ IF IFNULL(P_COMMIT,'N') = 'S'THEN
+ COMMIT;
+END IF;
+ 
 
 END

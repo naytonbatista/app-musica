@@ -52,7 +52,7 @@ class ArtistaRepository
     
         $stmt->execute();
      
-        $retorno = $pdo->query("SELECT @P_ID_ARTISTA ID_ARTISTA , @P_OK SUCCESS, @P_RETORNO MENSAGEM")->fetch(PDO::FETCH_ASSOC);
+        $retorno = $pdo->query("SELECT @P_OK SUCCESS, @P_RETORNO MENSAGEM")->fetch(PDO::FETCH_ASSOC);
     
         return $retorno;
     }
