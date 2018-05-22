@@ -17,3 +17,4 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
 
 
 require __DIR__ . '/routes/usuario.php';
+require __DIR__ . '/routes/artista.php';

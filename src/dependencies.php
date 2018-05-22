@@ -30,3 +30,8 @@ $container['user_repository'] = function($c){
     $repository = new App\Repositories\UsuarioRepository($c['db']);
     return $repository;
 };
+
+$container['artista_repository'] = function($c){
+    $repository = new App\Repositories\ArtistaRepository($c['db']);
+    return $repository;
+};
