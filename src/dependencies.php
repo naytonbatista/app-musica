@@ -35,3 +35,8 @@ $container['artista_repository'] = function($c){
     $repository = new App\Repositories\ArtistaRepository($c['db']);
     return $repository;
 };
+
+$container['musica_repository'] = function($c){
+    $repository = new App\Repositories\MusicaRepository($c['db']);
+    return $repository;
+};
