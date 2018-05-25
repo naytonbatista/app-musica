@@ -1,11 +1,14 @@
-CREATE DEFINER=`dba`@`%` PROCEDURE `MSG_ERRO`(IN P_TEX_IDENTIFICADOR VARCHAR(30),
-							IN P_PARAM1            VARCHAR(100),
-							IN P_PARAM2            VARCHAR(100),
-							IN P_PARAM3            VARCHAR(100),
-							IN P_PARAM4            VARCHAR(100),
-							IN P_PARAM5            VARCHAR(100))
+CREATE DEFINER=`dba`@`%` PROCEDURE `MSG_ERRO`(IN  P_TEX_IDENTIFICADOR VARCHAR(30),
+											  IN  P_PARAM1            VARCHAR(100),
+											  IN  P_PARAM2            VARCHAR(100),
+											  IN  P_PARAM3            VARCHAR(100),
+											  IN  P_PARAM4            VARCHAR(100),
+											  IN  P_PARAM5            VARCHAR(100),
+                                              OUT P_OK	              CHAR(1),
+                                              OUT P_RETORNO	          VARCHAR(2000))
 BEGIN
 
+    
 DECLARE V_MSGERRO         VARCHAR(2000);
 
  -- PEGA A MSG DE ERRO    
@@ -30,11 +33,11 @@ DECLARE V_MSGERRO         VARCHAR(2000);
 	
     
     IF V_MSGERRO IS NULL THEN
-      SIGNAL SQLSTATE '45000'
-      SET MESSAGE_TEXT = 'ERRO ! MENSAGEM NAO CADASTRADA', MYSQL_ERRNO = 1001;
-    ELSE
-	  SIGNAL SQLSTATE '45000'
-      SET MESSAGE_TEXT = V_MSGERRO, MYSQL_ERRNO = 1001;
+      SET V_MSGERRO = 'ERRO ! MENSAGEM DE ERRO NAO CADASTRADA PARA O PARAMETRO: ' || P_TEX_IDENTIFICADOR;
     END IF;
-  
+    
+    SET P_OK	  = 'N';
+    SET P_RETORNO = V_MSGERRO;
+    
+
 END
