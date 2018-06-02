@@ -40,3 +40,7 @@ $container['musica_repository'] = function($c){
     $repository = new App\Repositories\MusicaRepository($c['db']);
     return $repository;
 };
+
+$container['errorHandler'] = function($c){
+    return new App\Errors\Erro;
+};
