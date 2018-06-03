@@ -2,14 +2,45 @@
 
 namespace App\Repositories;
 use PDO;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class UsuarioRepository
 {
     private $_db = null;
+    private $_table = "USUARIO";
     
     public function __construct($db)
     {
        $this->_db = $db;
+    }
+
+    public function Listar($filtros)
+    {
+        $query = DB::table($this->_table);
+        $where = [];
+        
+        if(isset($filtros["id"])){
+            array_push($where, ["ID_USUARIO", "=", $filtros["id"]]);
+        }
+
+        if(isset($filtros["email"])){
+            array_push($where, ["USU_EMAIL", "=", $filtros["email"]]);
+        }
+        
+        if(isset($filtros["ativo"])){
+            array_push($where, ["USU_ATIVO", "=", $filtros["ativo"]]);
+        }
+
+        if(isset($filtros["senha"])){
+            array_push($where, ["USU_SENHA", "=", $filtros["senha"]]);
+        }
+
+        if (count($where) > 0) {
+            
+            $query->where($where);
+        }
+
+        return $query->get();
     }
 
     public function Incluir($usuario)
