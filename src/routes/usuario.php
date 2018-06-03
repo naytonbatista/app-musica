@@ -3,10 +3,15 @@
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Models\Usuario;
+use App\Helpers\Helper;
 
-$app->get('/api/usuario', function($request, $response, $args){
-    $usuarios = Usuario::all();
-    return $response->withJson($usuarios);
+$app->get('/api/usuario/find', function($request, $response){
+
+    $filtros = $request->getQueryParams();
+
+    $usuarios = $this->user_repository->Listar($filtros);
+
+    return $response->withJson($usuarios);  
 });
 
 $app->get('/api/usuario/{id}', function($request, $response, $args){
