@@ -26,7 +26,7 @@ $container['db'] = function($c){
     return $manager->getConnection('default');
 };
 
-$container['user_repository'] = function($c){
+$container['usuario_repository'] = function($c){
     $repository = new App\Repositories\UsuarioRepository($c['db']);
     return $repository;
 };
@@ -38,6 +38,11 @@ $container['artista_repository'] = function($c){
 
 $container['musica_repository'] = function($c){
     $repository = new App\Repositories\MusicaRepository($c['db']);
+    return $repository;
+};
+
+$container['playlist_repository'] = function($c){
+    $repository = new App\Repositories\PlaylistRepository($c['db']);
     return $repository;
 };
 

@@ -9,7 +9,7 @@ $app->get('/api/usuario/find', function($request, $response){
 
     $filtros = $request->getQueryParams();
 
-    $usuarios = $this->user_repository->Listar($filtros);
+    $usuarios = $this->usuario_repository->Listar($filtros);
 
     return $response->withJson($usuarios);  
 });
@@ -30,7 +30,7 @@ $app->post('/api/usuario', function($request, $response, $args){
     $usuario->email = $data["email"];
     $usuario->senha = $data["senha"];
 
-    $retorno = $this->user_repository->Incluir($usuario);
+    $retorno = $this->usuario_repository->Incluir($usuario);
 
     return $response->withJson($retorno);
 
@@ -47,7 +47,7 @@ $app->put('/api/usuario/{id}', function($request, $response, $args){
     $usuario->ativo = $data["ativo"];
     $usuario->id = $args["id"];
 
-    $retorno = $this->user_repository->Alterar($usuario);
+    $retorno = $this->usuario_repository->Alterar($usuario);
 
     return $response->withJson($retorno);
 
@@ -61,7 +61,7 @@ $app->put('/api/usuario/regerarsenha/{id}', function($request, $response, $args)
 
     $usuario->id = $args["id"];
 
-    $retorno = $this->user_repository->RegerarSenha($usuario);
+    $retorno = $this->usuario_repository->RegerarSenha($usuario);
 
     return $response->withJson($retorno);
 
