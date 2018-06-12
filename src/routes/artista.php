@@ -20,12 +20,7 @@ $app->post('/api/artista', function($request, $response, $args){
     
     $data = $request->getParsedBody();
 
-    $artista =  new Artista;
-
-    $artista->nome = $data["nome"];
-    $artista->linkFoto = $data["link_foto"];
-
-    $retorno = $this->artista_repository->Incluir($artista);
+    $retorno = $this->artista_repository->Incluir($data);
 
     return $response->withJson($retorno);
 });

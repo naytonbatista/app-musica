@@ -22,15 +22,10 @@ $app->get('/api/usuario/{id}', function($request, $response, $args){
 
 
 $app->post('/api/usuario', function($request, $response, $args){
-    
+
     $data = $request->getParsedBody();
 
-    $usuario =  new Usuario;
-
-    $usuario->email = $data["email"];
-    $usuario->senha = $data["senha"];
-
-    $retorno = $this->usuario_repository->Incluir($usuario);
+    $retorno = $this->usuario_repository->Incluir($data);
 
     return $response->withJson($retorno);
 
@@ -40,7 +35,7 @@ $app->put('/api/usuario/{id}', function($request, $response, $args){
     
     $data = $request->getParsedBody();
 
-    $usuario =  new Usuario;
+    $usuario =  new StdClass;
 
     $usuario->email = $data["email"];
     $usuario->senha = $data["senha"];
