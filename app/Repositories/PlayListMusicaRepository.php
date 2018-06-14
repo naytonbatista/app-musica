@@ -6,15 +6,9 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class PlayListMusicaRepository extends AbstractRepository
 {
+    private $_db = null;
     protected $table   = "PLAYLIST_MUSICA";
     protected $prefixo = "PLM";
     
-    public function __construct($db)
-    {
-       $this->_db = $db;
-    }
-
-    
-
 }
 
