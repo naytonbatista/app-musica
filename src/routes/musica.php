@@ -17,17 +17,10 @@ $app->get('/api/musica/{id}', function($request, $response, $args){
 
 
 $app->post('/api/musica', function($request, $response, $args){
-    
+      
     $data = $request->getParsedBody();
 
-    $musica =  new Musica;
-    
-    $musica->idartista   = $data["id_artista"];
-    $musica->musicanome  = $data["musica"];
-    $musica->musicaletra = $data["letra"];
-    $musica->linkletra   = $data["link_letra"];
-
-    $retorno = $this->musica_repository->Incluir($musica);
+    $retorno = $this->musica_repository->Incluir($data);
 
     return $response->withJson($retorno);
 
@@ -37,15 +30,7 @@ $app->put('/api/musica/{id}', function($request, $response, $args){
     
     $data = $request->getParsedBody();
 
-    $musica =  new Musica;
-
-    $musica->idartista   = $data["id_artista"];
-    $musica->musicanome  = $data["musica"];
-    $musica->musicaletra = $data["letra"];
-    $musica->linkletra   = $data["link_letra"];
-    $musica->idmusica = $args["id_musica"];
-
-    $retorno = $this->musica_repository->Alterar($musica);
+    $retorno = $this->musica_repository->Alterar($data);
 
     return $response->withJson($retorno);
 

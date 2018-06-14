@@ -35,14 +35,7 @@ $app->put('/api/usuario/{id}', function($request, $response, $args){
     
     $data = $request->getParsedBody();
 
-    $usuario =  new StdClass;
-
-    $usuario->email = $data["email"];
-    $usuario->senha = $data["senha"];
-    $usuario->ativo = $data["ativo"];
-    $usuario->id = $args["id"];
-
-    $retorno = $this->usuario_repository->Alterar($usuario);
+    $retorno = $this->usuario_repository->Alterar($data);
 
     return $response->withJson($retorno);
 

@@ -25,12 +25,7 @@ $app->post('/api/playlist', function($request, $response, $args){
     
     $data = $request->getParsedBody();
 
-    $playlist =  new Playlist;
-
-    $playlist->nome      = $data["nome"];
-    $playlist->idusuario = $data["idusuario"];
-
-    $retorno = $this->playlist_repository->Incluir($playlist);
+    $retorno = $this->playlist_repository->Incluir($data);
 
     return $response->withJson($retorno);
 
@@ -40,13 +35,7 @@ $app->put('/api/playlist/{id}', function($request, $response, $args){
     
     $data = $request->getParsedBody();
 
-    $playlist =  new Playlist;
-
-    $playlist->idusuario = $data["idusuario"];
-    $playlist->nome      = $data["nome"];
-    $playlist->id        = $args["id"];
-
-    $retorno = $this->playlist_repository->Alterar($playlist);
+    $retorno = $this->playlist_repository->Alterar($data);
 
     return $response->withJson($retorno);
 

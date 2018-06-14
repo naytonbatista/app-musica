@@ -29,13 +29,7 @@ $app->put('/api/artista/{id}', function($request, $response, $args){
     
     $data = $request->getParsedBody();
 
-    $artista =  new Artista;
-
-    $artista->nome = $data["nome"];
-    $artista->link_foto = $data["link_foto"];
-    $artista->id = $args["id"];
-
-    $retorno = $this->artista_repository->Alterar($artista);
+    $retorno = $this->artista_repository->Alterar($data);
 
     return $response->withJson($retorno);
 
