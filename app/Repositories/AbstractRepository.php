@@ -9,13 +9,11 @@ abstract class AbstractRepository
     private $_db = null;
     protected $table = "";
     protected $prefixo = "";
-    protected $crudFields = array();
 
     public function __construct($db)
     {
        $this->_db = $db;
     }
-
 
     public function Listar($filtros)
     {
@@ -52,37 +50,69 @@ abstract class AbstractRepository
     public function Incluir($params)
     {
         $pdo = $this->_db->getPdo();
-
-        $procName = "INCLUIR_". $this->table;
-        
         $chamada = "CALL INCLUIR_{$this->table}(";
-
-        $procParams = $this->_getParamsFromColumns();
-
-        $chamada = $chamada. $procParams . ")";
+        $strProcParams = $this->_getParamsFromColumns(false);
+        $procParams = explode(", ", $strProcParams);
+        
+        $chamada = $chamada. $strProcParams . ")";
         
         $stmt = $pdo->prepare($chamada);
         
-        $idParam = explode(', ', $this->_getParamsFromColumns())[0];
-
-        $this->_bindParams($stmt, $params);
+        $idParam = $procParams[0];
+        
+        $this->_bindParams($stmt, $params, $procParams);
 
         $stmt->execute();
 
-        $retorno = $pdo->query("SELECT {$idParam} ID_{$this->table} , @P_OK SUCCESS, @P_RETORNO MENSAGEM")->fetch(PDO::FETCH_ASSOC);
+        $retorno = $pdo->query("SELECT {$idParam} ID, @P_OK SUCCESS, @P_RETORNO MENSAGEM")->fetch(PDO::FETCH_ASSOC);
 
         return $retorno;
     }
 
-    private function _bindParams($stmt, $params){
+    public function Alterar($params)
+    {
+        $pdo = $this->_db->getPdo();
+        $chamada = "CALL ALTERAR_{$this->table}(";
+        $strProcParams = $this->_getParamsFromColumns(true);
+        $procParams = explode(', ', $strProcParams);
+        
+        $chamada = $chamada. $strProcParams . ")";
+        
+        $stmt = $pdo->prepare($chamada);
+        
+        $idParam = $procParams[0];
 
-        $procParams = explode(', ', $this->_getParamsFromColumns());
+        $this->_bindParams($stmt, $params, $procParams);
+
+        $stmt->execute();
+
+        $retorno = $pdo->query("SELECT {$idParam} ID, @P_OK SUCCESS, @P_RETORNO MENSAGEM")->fetch(PDO::FETCH_ASSOC);
+
+        return $retorno;
+    }
+
+    private function _bindParams($stmt, $params, $procedureParams){
+
+        $param ="";
 
         foreach ($params as $key => $value) {
             
+            if (strtoupper($key) == "ID") {
+                $param = ":P_ID_". $this->table;
+                $stmt->bindParam($param, $params[$key], PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+                continue;
+            }
+
             $param = ":P_". $this->prefixo . "_" .strtoupper($key);
             
-            if (in_array($param, $procParams)) {
+            if (in_array($param, $procedureParams)) {
+                $stmt->bindParam($param, $params[$key], PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+                continue;
+            }
+
+            $param = ":P_ID_" .strtoupper($key);
+
+            if (in_array($param, $procedureParams)) {
                 $stmt->bindParam($param, $params[$key], PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
             }
         }
@@ -93,8 +123,8 @@ abstract class AbstractRepository
         
     }
 
-    private function _getParamsFromColumns(){
-
+    private function _getParamsFromColumns(bool $isUpdate) : string
+    {
         $chamada ="";
         $columns = DB::getSchemaBuilder()->getColumnListing($this->table);
 
@@ -107,7 +137,7 @@ abstract class AbstractRepository
             }
             
             if ($coluna == "ID_{$this->table}") {
-                $parametro = "@P_".strtoupper($coluna);
+                $parametro = ($isUpdate ? ":" : "@") . "P_".strtoupper($coluna);
                 $chamada = "{$chamada}{$parametro}, ";
                 continue;
             }
