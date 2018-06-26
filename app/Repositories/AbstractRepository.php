@@ -51,7 +51,7 @@ abstract class AbstractRepository
     {
         $pdo = $this->_db->getPdo();
         $chamada = "CALL INCLUIR_{$this->table}(";
-        $strProcParams = $this->_getParamsFromColumns(false);
+        $strProcParams = $this->_getParamsFromColumns(false, $params);
         $procParams = explode(", ", $strProcParams);
         
         $chamada = $chamada. $strProcParams . ")";
@@ -61,7 +61,7 @@ abstract class AbstractRepository
         $idParam = $procParams[0];
         
         $this->_bindParams($stmt, $params, $procParams);
-
+        
         $stmt->execute();
 
         $retorno = $pdo->query("SELECT {$idParam} ID, @P_OK SUCCESS, @P_RETORNO MENSAGEM")->fetch(PDO::FETCH_ASSOC);
@@ -73,7 +73,7 @@ abstract class AbstractRepository
     {
         $pdo = $this->_db->getPdo();
         $chamada = "CALL ALTERAR_{$this->table}(";
-        $strProcParams = $this->_getParamsFromColumns(true);
+        $strProcParams = $this->_getParamsFromColumns(true, $params);
         $procParams = explode(', ', $strProcParams);
         
         $chamada = $chamada. $strProcParams . ")";
@@ -123,16 +123,19 @@ abstract class AbstractRepository
         
     }
 
-    private function _getParamsFromColumns(bool $isUpdate) : string
+    private function _getParamsFromColumns(bool $isUpdate, array $params) : string
     {
         $chamada ="";
         $columns = DB::getSchemaBuilder()->getColumnListing($this->table);
+        $params = array_change_key_case($params, CASE_UPPER);
+        $colunaSemPrefixo ="";
 
         foreach ($columns as $coluna) {
          
             $parametro = "";
-
-            if ($coluna == "{$this->prefixo}_DATA_CADASTRO") {
+            $colunaSemPrefixo = substr($coluna, 4);
+            
+            if (substr($coluna, 0, 3) == $this->prefixo && !array_key_exists($colunaSemPrefixo, $params)) {
                 continue;
             }
             
