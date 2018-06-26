@@ -34,6 +34,8 @@ $app->post('/api/usuario', function($request, $response, $args){
 $app->put('/api/usuario/{id}', function($request, $response, $args){
     
     $data = $request->getParsedBody();
+    $data["id"] = $args["id"];
+   
 
     $retorno = $this->usuario_repository->Alterar($data);
 

@@ -77,16 +77,16 @@ abstract class AbstractRepository
         $procParams = explode(', ', $strProcParams);
         
         $chamada = $chamada. $strProcParams . ")";
-        
+
         $stmt = $pdo->prepare($chamada);
         
         $idParam = $procParams[0];
-
+        
         $this->_bindParams($stmt, $params, $procParams);
 
         $stmt->execute();
 
-        $retorno = $pdo->query("SELECT {$idParam} ID, @P_OK SUCCESS, @P_RETORNO MENSAGEM")->fetch(PDO::FETCH_ASSOC);
+        $retorno = $pdo->query("SELECT {$params["id"]} ID, @P_OK SUCCESS, @P_RETORNO MENSAGEM")->fetch(PDO::FETCH_ASSOC);
 
         return $retorno;
     }
@@ -99,14 +99,14 @@ abstract class AbstractRepository
             
             if (strtoupper($key) == "ID") {
                 $param = ":P_ID_". $this->table;
-                $stmt->bindParam($param, $params[$key], PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+                $stmt->bindParam($param, $value, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
                 continue;
             }
 
             $param = ":P_". $this->prefixo . "_" .strtoupper($key);
             
             if (in_array($param, $procedureParams)) {
-                $stmt->bindParam($param, $params[$key], PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+                $stmt->bindParam($param, $value, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
                 continue;
             }
 
@@ -114,6 +114,8 @@ abstract class AbstractRepository
 
             if (in_array($param, $procedureParams)) {
                 $stmt->bindParam($param, $params[$key], PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+                
+
             }
         }
 
