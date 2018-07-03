@@ -30,5 +30,12 @@ class UsuarioRepository extends AbstractRepository
 
     }
 
+    public function Login($email, $senha)
+    {
+        $usuario = DB::table($this->table)->where([["USU_EMAIL", "=", $email], ["USU_SENHA", "=", $senha]])->first();
+                
+        return $usuario;
+    }
+
 }
 
